@@ -7,19 +7,19 @@ dotenv.config();
 const app = express();
 app.use(helmet());
 app.use(morgan('common'));
-app.use(isAuthenticated);
+// app.use(isAuthenticated);
 const port = process.env.PORT;
 
 app.get('/test', (request, response) => {
   response.send('Det funkar - TEST');
 });
 
-app.get('/user', (request, response) => {
-  response.send('user');
-});
+app.get('/user', isAuthenticated, (request, response) => {});
 
 function isAuthenticated(request, response, next) {
-  console.log('Middleware function is running!');
+  request.query.admin === 'true'
+    ? response.send('You are an admin')
+    : response.send('You cannot make call to this API URL');
   next();
 }
 
