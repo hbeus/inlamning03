@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const notFound = (request, response, next) => {
   const error = new Error(`Not found: ${request.originalUrl}`);
   response.status(404);
@@ -10,7 +14,10 @@ const errorHandler = (error, request, response, next) => {
   response.json({
     statuscode: statuscode,
     message: error.message,
-    stracktrace: error.stack,
+    stracktrace:
+      process.env.ENVIRONMENT === 'PRODUCTION'
+        ? 'Production environment'
+        : error.stack,
   });
 };
 
