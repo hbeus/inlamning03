@@ -38,7 +38,11 @@ const getUserWithId = async (req, res) => {
 const getUserWithUsername = async (req, res) => {
   try {
     const response = await userModel.find({ username: req.query.username });
-    res.status(200).send(response);
+    response.length !== 0
+      ? res.status(200).send(response)
+      : res
+          .status(404)
+          .send({ message: 'Could not find user ' + req.query.username });
   } catch (error) {
     res.status(500).send({
       message:
